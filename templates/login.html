@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: url('static/assets/Aurora_b.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #d0e1ff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .login-container {
+            background: rgba(0, 0, 35, 0.2);
+            width: 400px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 4px 15px rgba(160, 196, 255, 0.2);
+            margin: 100px auto;
+        }
+
+        h2 {
+            color: rgba(160, 196, 255, 0.9);
+            text-shadow: 0px 2px 8px rgba(160, 196, 255, 0.2);
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: rgba(200, 220, 255, 0.8);
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid rgba(160, 196, 255, 0.5);
+            box-shadow: 0px 0px 10px rgba(160, 196, 255, 0.5);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background: rgba(105, 205, 105, 0.8);
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: rgba(105, 205, 105, 1);
+            box-shadow: 0px 4px 10px rgba(105, 205, 105, 0.5);
+        }
+
+        .link {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #a0c4ff;
+        }
+
+        .link a {
+            color: #a0c4ff;
+            text-decoration: none;
+        }
+
+        .link a:hover {
+            text-shadow: 0 0 8px rgba(160, 196, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Login</h2>
+
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <p class="flash {{ category }}">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <label for="email">Email</label>
+            {{ form.email(class="form-control") }}
+
+            <label for="password">Password</label>
+            {{ form.password(class="form-control") }}
+
+            <button type="submit" class="btn">Login</button>
+        </form>
+
+        <p class="link">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+    </div>
+
+</body>
+</html>

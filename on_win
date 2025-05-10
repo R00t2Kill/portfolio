@@ -1,0 +1,16 @@
+# in powershell
+
+	>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+
+	>python -m venv venv
+
+	>.\'venv\Scripts\activate'
+
+	>pip install flask
+
+	>python main.py
+
+#now open browser
+	and type in address bar
+	localhost:5000
+

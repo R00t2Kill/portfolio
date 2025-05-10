@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Responsive Portfolio</title>
+	<style>
+		:root {
+			--primary-color: #a0c4ff;
+			--secondary-color: rgba(160, 196, 255, 0.1);
+			--bg-color: rgba(0, 0, 35, 0.1);
+			--text-color: white;
+			--accent-color: rgba(105, 255, 255, 0.9);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: Arial, sans-serif;
+			background: url('static/assets/bg.jpg') no-repeat center center fixed;
+			background-size: cover;
+			color: var(--text-color);
+			line-height: 1.6;
+		}
+
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 15px 30px;
+			background: var(--bg-color);
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0);
+			position: sticky;
+			top: 0;
+			z-index: 1000;
+		}
+
+		.logo img {
+			width: 60px;
+			height: 60px;
+		}
+
+		nav {
+			display: flex;
+			gap: 15px;
+		}
+
+		nav a {
+			color: white;
+			text-decoration: none;
+			font-weight: bold;
+			transition: 0.3s ease-in-out;
+		}
+
+		nav a:hover {
+			color: var(--primary-color);
+			transform: scale(1.05);
+			text-shadow: 0 0 8px var(--primary-color);
+		}
+
+		.menu-toggle {
+			display: none;
+			flex-direction: column;
+			cursor: pointer;
+		}
+
+		.menu-toggle span {
+			height: 3px;
+			width: 25px;
+			background: white;
+			margin: 4px 0;
+		}
+
+		.hero {
+			text-align: center;
+			position: relative;
+			padding: 60px 20px;
+		}
+
+		.hero img {
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			object-fit: cover;
+			box-shadow: 0 8px 10px var(--accent-color);
+			margin-bottom: 20px;
+		}
+
+		.split-text {
+			font-size: 2em;
+			font-weight: bold;
+			margin: 10px;
+		}
+
+		.left {
+			color: rgba(105, 205, 105, 0.7);
+		}
+		.right {
+			color: rgba(155, 106, 255, 0.7);
+		}
+
+		.bio-section {
+			padding: 40px 20px;
+			background: var(--secondary-color);
+			display: flex;
+			justify-content: center;
+		}
+
+		.bio-container {
+			display: flex;
+			gap: 30px;
+			max-width: 1000px;
+			flex-wrap: wrap;
+		}
+
+		.bio-image {
+			width: 250px;
+			height: 250px;
+			border-radius: 50%;
+			object-fit: cover;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+		}
+
+		.bio-text {
+			max-width: 600px;
+		}
+
+		.bio-text h2 {
+			color: #d0e1ff;
+			margin-bottom: 15px;
+		}
+
+		.project-section, .news-section {
+			padding: 40px 20px;
+			text-align: center;
+			background: rgba(205, 205, 205, 0.1);
+		}
+
+		.project-gallery, .news-gallery {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+			gap: 20px;
+			margin-top: 20px;
+		}
+
+		.project-gallery img,
+		.news-gallery img {
+			width: 100%;
+			border-radius: 12px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+			transition: 0.3s;
+		}
+
+		.project-gallery img:hover,
+		.news-gallery img:hover {
+			transform: scale(1.05);
+		}
+
+		footer {
+			padding: 20px;
+			text-align: center;
+			background: #000;
+			color: white;
+		}
+
+		/* Responsive Menu */
+		@media (max-width: 768px) {
+			nav {
+				display: none;
+				flex-direction: column;
+				background: rgba(0, 0, 0, 0.9);
+				position: absolute;
+				top: 70px;
+				right: 20px;
+				padding: 15px;
+				border-radius: 10px;
+			}
+
+			nav.show {
+				display: flex;
+			}
+
+			.menu-toggle {
+				display: flex;
+			}
+
+			.bio-container {
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.split-text {
+				font-size: 1.5em;
+			}
+
+			.hero img {
+				width: 180px;
+				height: 180px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.hero img {
+				width: 140px;
+				height: 140px;
+			}
+
+			.split-text {
+				font-size: 1.2em;
+			}
+
+			.bio-text h2 {
+				font-size: 22px;
+			}
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<div class="logo">
+			<img src="static/assets/small_logo.png" alt="Logo">
+		</div>
+		<div class="menu-toggle" onclick="document.querySelector('nav').classList.toggle('show')">
+			<span></span><span></span><span></span>
+		</div>
+		<nav>
+			<a href="#bio">About</a>
+			{% if current_user.is_authenticated %}
+				<a href="{{ url_for('logout') }}">Logout</a>
+			{% else %}
+				<a href="{{ url_for('login') }}">Login</a>
+			{% endif %}
+			<a href="#projects">Projects</a>
+			<a href="#contacts">Contact</a>
+		</nav>
+	</header>
+
+	<section class="hero">
+		<div class="split-text left">&lt;Hacker&gt;</div>
+		<img src="static/assets/hacker_logo1.png" alt="Portfolio Image">
+		<div class="split-text right">&lt;Coder&gt;</div>
+	</section>
+
+	<section id="bio" class="bio-section">
+		<div class="bio-container">
+			<img src="static/assets/my_img.png" alt="Your Photo" class="bio-image">
+			<div class="bio-text">
+				<h2>About Me</h2>
+				<p>
+					I am a passionate Computer Security Researcher with deep expertise in Python and proficiency in multiple programming languages, including Go. Currently pursuing my B.Tech in Computer Science, I thrive on exploring the intricate world of cybersecurity, software development, and system architecture.
+					My workflow revolves around Linux, where I fine-tune my skills in scripting, networking, and system security. I am always eager to push the boundaries of knowledge, constantly learning and experimenting with new technologies, programming paradigms, and security methodologies.
+					Driven by curiosity and innovation, I believe in building secure, efficient, and scalable solutions that not only solve problems but also enhance the digital world.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<section id="projects" class="project-section">
+		<h2>Some of My Projects</h2>
+		<div class="project-gallery">
+			<a href="#"><img src="static/assets/1.png" alt="Project 1"></a>
+			<a href="#"><img src="static/assets/2.png" alt="Project 2"></a>
+			<a href="#"><img src="static/assets/3.png" alt="Project 3"></a>
+			<a href="#"><img src="static/assets/4.png" alt="Project 4"></a>
+			<a href="#"><img src="static/assets/5.png" alt="Project 5"></a>
+			<a href="#"><img src="static/assets/6.png" alt="Project 6"></a>
+			<a href="#"><img src="static/assets/7.png" alt="Project 7"></a>
+			<a href="#"><img src="static/assets/8.png" alt="Project 8"></a>
+		</div>
+	</section>
+
+	<section id="news" class="news-section">
+		<h2>Currently Working On</h2>
+		<div class="news-gallery">
+			<a href="#"><img src="static/assets/1.png" alt="News 1"></a>
+			<a href="#"><img src="static/assets/2.png" alt="News 2"></a>
+			<a href="#"><img src="static/assets/3.png" alt="News 3"></a>
+			<a href="#"><img src="static/assets/4.png" alt="News 4"></a>
+			<a href="#"><img src="static/assets/5.png" alt="News 5"></a>
+			<a href="#"><img src="static/assets/6.png" alt="News 6"></a>
+			<a href="#"><img src="static/assets/7.png" alt="News 7"></a>
+			<a href="#"><img src="static/assets/8.png" alt="News 8"></a>
+		</div>
+	</section>
+
+	<footer id="contacts" class="footer">
+		<p>&copy; 2024 Your Name</p>
+	</footer>
+</body>
+</html>
