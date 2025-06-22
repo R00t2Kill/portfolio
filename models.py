@@ -2,10 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
+import os
 #init
 app = Flask(__name__)
-app.config["SECRET_KEY"]="kadua"
-app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///site.db"
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "fallback-dev-secret")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI", "sqlite:///site.db")
 db=SQLAlchemy(app)
 bcrypt = Bcrypt()
 
