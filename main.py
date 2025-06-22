@@ -1,11 +1,17 @@
 #imports
-from flask import render_template,url_for,flash,redirect,request
+from flask import render_template,url_for,flash,redirect,request,send_file
 from forms import RegistrationForm,LoginForm
 from models import app,db,User
 from flask_login import LoginManager,login_user, login_required, logout_user, current_user
-
+from downloader import ddl,downloader
 with app.app_context():
 	db.create_all() 
+
+
+#vars
+ddl_response=None
+
+
 
 # Initialize Flask-Login
 login_manager = LoginManager()
@@ -65,11 +71,35 @@ def login():
 
 	return render_template("login.html", form=form)
 
-#project
-@app.route("/project")
+#BUResult
+@app.route("/BUResults")
 @login_required  # Ensures only logged-in users can access this route
-def project():
-	return f"Welcome {current_user.email}! This is your project page."
+def BUResults():
+	global ddl_response
+	ddl_response=ddl.func()
+	return render_template("BUjhansi.html",resultType=ddl_response[1],courses=ddl_response[0])
+
+@app.route("/BUResultsubmit", methods=["POST"])
+def submit():
+    roll_from = request.form.get("roll_from")
+    roll_to = request.form.get("roll_to")
+    result_type_label = request.form.get("result_type")
+    course_label = request.form.get("course")
+
+    # Convert label to ID
+    course_id = ddl_response[0].get(course_label)
+    result_id = ddl_response[1].get(result_type_label)
+
+    pdf_stream=downloader.func(roll_from,roll_to,course_id,course_label,result_id)
+    return send_file(
+        pdf_stream,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=f"{course_label}_merged_results.pdf"
+    )
+
+
+
 
 #logout
 @app.route("/logout")
@@ -83,6 +113,6 @@ def logout():
 if __name__=="__main__":
 	with app.app_context():
 		db.create_all()
-	app.run(host="0.0.0.0", port=5000 ,debug=True)
+	app.run()
 
 
